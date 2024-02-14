@@ -5,11 +5,13 @@ pragma solidity >=0.8.2 <0.9.0;
 contract TodoContract {
     event AddTask(address reciepts, uint taskId);
     event DeleteTask(uint taskId, bool isDeleted);
+    event EditTask(uint taskId, bool completed);
 
     struct Task {
         uint id;
         string taskText;
         bool isDeleted;
+        bool completed;
     }
 
     Task[] private tasks;
@@ -44,5 +46,22 @@ contract TodoContract {
 
         return result;
     }
+
+    // update task
+    function (uint taskId, bool completed) external {
+        if(taskToOwner[taskId] == msg.sender){
+            task[taskId].completed = completed;
+            emit EditTask(taskId, completed);
+        }
+    }
+
+    // delete task
+    function (uint taskId, bool isDeleted) external {
+        if(taskToOwner[taskId] == msg.sender){
+            tasks[taskId].isDeleted = isDeleted;
+            emit DeleteTask(taskId, isDeleted)
+        }
+    }
+
 
 }
