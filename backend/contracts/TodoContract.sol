@@ -24,4 +24,25 @@ contract TodoContract {
 
     }
 
+    function getMyTasks () external view returns (Task[] memory){
+        Task[] memory temporary = new Task[](tasks.length);
+        uint counter = 0;
+
+        // getting task that is mine and adding to the another array temporary
+        for (uint256 i = 0; i < temporary.length; i++) {
+            if(taskToOwner[i] == msg.sender && tasks[i].isDeleted == false){
+                temporary[counter] = tasks[i];
+                counter++;
+            }
+        }
+
+        // add new temporary array to a new array
+        Task[] memory result = new Task[](counter);
+        for (uint256 i = 0; i < temporary.length; i++) {
+            result[i] = temporary[i];
+        }
+
+        return result;
+    }
+
 }
