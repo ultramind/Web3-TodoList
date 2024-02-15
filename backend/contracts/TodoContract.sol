@@ -18,9 +18,9 @@ contract TodoContract {
     mapping (uint => address) taskToOwner;
 
     // Functions that can be accessed from frontend
-    function addTask (string memory taskText, bool isDeleted) external {
+    function addTask (string memory taskText, bool isDeleted, bool completed) external {
         uint taskId = tasks.length;
-        tasks.push(Task(taskId, taskText, isDeleted));
+        tasks.push(Task(taskId, taskText, isDeleted, completed));
         taskToOwner[taskId] = msg.sender;
         emit AddTask(msg.sender, taskId);
 
@@ -48,18 +48,19 @@ contract TodoContract {
     }
 
     // update task
-    function (uint taskId, bool completed) external {
+    function editTask (uint taskId, bool completed) external {
         if(taskToOwner[taskId] == msg.sender){
-            task[taskId].completed = completed;
+            tasks[taskId].completed = completed;
             emit EditTask(taskId, completed);
         }
+        
     }
 
     // delete task
-    function (uint taskId, bool isDeleted) external {
+    function deleteTask (uint taskId, bool isDeleted) external {
         if(taskToOwner[taskId] == msg.sender){
             tasks[taskId].isDeleted = isDeleted;
-            emit DeleteTask(taskId, isDeleted)
+            emit DeleteTask(taskId, isDeleted);
         }
     }
 
